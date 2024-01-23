@@ -195,12 +195,12 @@ size_t xPortGetMinimumEverFreeHeapSize( void ) PRIVILEGED_FUNCTION;
 /**
  * task.h
  * @code{c}
- * void vApplicationMallocFailedHook( void )
+ * void vApplicationMallocFailedHook( uint32_t freeHeap, uint32_t reqBytes )
  * @endcode
  *
  * This hook function is called when allocation failed.
  */
-    void vApplicationMallocFailedHook( void );
+void vApplicationMallocFailedHook( uint32_t freeHeap, uint32_t reqBytes );
 #endif
 
 /*

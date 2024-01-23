@@ -3753,6 +3753,11 @@ void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut ) PRIVILEGED_FUNC
 
 #endif /* #if ( ( portUSING_MPU_WRAPPERS == 1 ) && ( configUSE_MPU_WRAPPERS_V1 == 0 ) && ( configENABLE_ACCESS_CONTROL_LIST == 1 ) ) */
 
+/*
+ * For external use only.  Get pending tick counts.
+ */
+volatile TickType_t xTaskGetPendingTicks(void);
+
 /* *INDENT-OFF* */
 #ifdef __cplusplus
     }

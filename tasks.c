@@ -8696,4 +8696,9 @@ static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
     }
 
 #endif /* #if ( ( configSUPPORT_STATIC_ALLOCATION == 1 ) && ( configKERNEL_PROVIDED_STATIC_MEMORY == 1 ) && ( portUSING_MPU_WRAPPERS == 0 ) ) */
+
+volatile TickType_t xTaskGetPendingTicks(void)
+{
+	return xPendedTicks;
+}
 /*-----------------------------------------------------------*/

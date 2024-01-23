@@ -331,7 +331,7 @@ void * pvPortMalloc( size_t xWantedSize )
     {
         if( pvReturn == NULL )
         {
-            vApplicationMallocFailedHook();
+            vApplicationMallocFailedHook(xFreeBytesRemaining, xWantedSize);
         }
         else
         {
