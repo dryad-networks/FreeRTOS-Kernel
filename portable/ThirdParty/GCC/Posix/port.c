@@ -104,6 +104,7 @@ static volatile BaseType_t uxCriticalNesting;
 /*-----------------------------------------------------------*/
 
 static BaseType_t xSchedulerEnd = pdFALSE;
+extern uint8_t simulationSpeedXTimeFaster;
 /*-----------------------------------------------------------*/
 
 static void prvSetupSignalsAndSchedulerPolicy( void );
@@ -183,6 +184,7 @@ StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
     {
         prvFatalError( "pthread_create", iRet );
     }
+    //pthread_setname_np(thread->pthread, taskName);
 
     vPortExitCritical();
 
@@ -385,11 +387,11 @@ void prvSetupTimerInterrupt( void )
 
     /* Set the interval between timer events. */
     itimer.it_interval.tv_sec = 0;
-    itimer.it_interval.tv_usec = portTICK_RATE_MICROSECONDS;
+    itimer.it_interval.tv_usec = portTICK_RATE_MICROSECONDS / simulationSpeedXTimeFaster;
 
     /* Set the current count-down. */
     itimer.it_value.tv_sec = 0;
-    itimer.it_value.tv_usec = portTICK_RATE_MICROSECONDS;
+    itimer.it_value.tv_usec = portTICK_RATE_MICROSECONDS / simulationSpeedXTimeFaster;
 
     /* Set-up the timer interrupt. */
     iRet = setitimer( ITIMER_REAL, &itimer, NULL );
@@ -596,5 +598,23 @@ uint32_t ulPortGetRunTime( void )
     times( &xTimes );
 
     return ( uint32_t ) xTimes.tms_utime;
+}
+/*-----------------------------------------------------------*/
+
+void prvStartTickInterruptTimer(void)
+{
+    struct sigaction sigtick;
+    sigtick.sa_flags = 0;
+    sigtick.sa_handler = vPortSystemTickHandler;
+    sigaction( SIGALRM, &sigtick, NULL );
+}
+/*-----------------------------------------------------------*/
+
+void prvStopTickInterruptTimer(void)
+{
+    struct sigaction sigtick;
+    sigtick.sa_flags = 0;
+    sigtick.sa_handler = SIG_IGN;
+    sigaction( SIGALRM, &sigtick, NULL );
 }
 /*-----------------------------------------------------------*/
