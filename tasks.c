@@ -1964,7 +1964,11 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
         {
             #if ( portSTACK_GROWTH < 0 )
             {
-                pxNewTCB->pxTopOfStack = pxPortInitialiseStack( pxTopOfStack, pxNewTCB->pxStack, pxTaskCode, pvParameters );
+#ifndef SIMULATION_IN_PC
+            	pxNewTCB->pxTopOfStack = pxPortInitialiseStack( pxTopOfStack, pxNewTCB->pxStack, pxTaskCode, pvParameters );
+#else
+                pxNewTCB->pxTopOfStack = pxPortInitialiseStack( pxTopOfStack, pxNewTCB->pxStack, pxTaskCode, pvParameters, pxNewTCB->pcTaskName );
+#endif
             }
             #else /* portSTACK_GROWTH */
             {

@@ -121,10 +121,17 @@
     #endif /* if ( portHAS_STACK_OVERFLOW_CHECKING == 1 ) */
 #else /* if ( portUSING_MPU_WRAPPERS == 1 ) */
     #if ( portHAS_STACK_OVERFLOW_CHECKING == 1 )
+#ifndef SIMULATION_IN_PC
         StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
                                              StackType_t * pxEndOfStack,
                                              TaskFunction_t pxCode,
                                              void * pvParameters ) PRIVILEGED_FUNCTION;
+#else
+        StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
+                                             StackType_t * pxEndOfStack,
+                                             TaskFunction_t pxCode,
+                                             void * pvParameters, char *taskName ) PRIVILEGED_FUNCTION;
+#endif
     #else
         StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
                                              TaskFunction_t pxCode,

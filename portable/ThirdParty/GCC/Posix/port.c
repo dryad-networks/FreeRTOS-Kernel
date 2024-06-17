@@ -135,7 +135,7 @@ void prvFatalError( const char * pcCall,
 StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
                                      StackType_t * pxEndOfStack,
                                      TaskFunction_t pxCode,
-                                     void * pvParameters )
+                                     void * pvParameters, char *taskName )
 {
     Thread_t * thread;
     pthread_attr_t xThreadAttributes;
@@ -184,7 +184,7 @@ StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
     {
         prvFatalError( "pthread_create", iRet );
     }
-    //pthread_setname_np(thread->pthread, taskName);
+    pthread_setname_np(thread->pthread, taskName);
 
     vPortExitCritical();
 
