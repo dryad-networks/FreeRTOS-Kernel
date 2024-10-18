@@ -695,7 +695,23 @@
         return pxTimer->pcTimerName;
     }
 /*-----------------------------------------------------------*/
-
+#ifdef EXTENDED_TEST
+    extern void drdUpdateRunningTimerName(char *timerName);
+    extern void drdUpdateLongTimerName(char *timerName, uint32_t ticksTaken);
+    static void monitorTimerCallBack(Timer_t * const pxTimer)
+    {
+    	volatile uint32_t start = xTaskGetTickCount();
+    	drdUpdateRunningTimerName(pxTimer->pcTimerName);
+        pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
+        drdUpdateRunningTimerName(NULL);
+        volatile uint32_t stop = xTaskGetTickCount();
+        volatile uint32_t total = stop - start;
+        if (total >= 60) {
+        	drdUpdateLongTimerName(pxTimer->pcTimerName, total);
+        	printf("\n------------>%s timer took %ld ticks\n", pxTimer->pcTimerName, total);
+        }
+    }
+#endif
     static void prvReloadTimer( Timer_t * const pxTimer,
                                 TickType_t xExpiredTime,
                                 const TickType_t xTimeNow )
@@ -710,7 +726,11 @@
 
             /* Call the timer callback. */
             traceTIMER_EXPIRED( pxTimer );
+#ifdef EXTENDED_TEST
+            monitorTimerCallBack( ( TimerHandle_t ) pxTimer );
+#else
             pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
+#endif
         }
     }
 /*-----------------------------------------------------------*/
@@ -741,7 +761,11 @@
 
         /* Call the timer callback. */
         traceTIMER_EXPIRED( pxTimer );
+#ifdef EXTENDED_TEST
+        monitorTimerCallBack( ( TimerHandle_t ) pxTimer );
+#else
         pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
+#endif
     }
 /*-----------------------------------------------------------*/
 
@@ -1018,7 +1042,11 @@
 
                             /* Call the timer callback. */
                             traceTIMER_EXPIRED( pxTimer );
+#ifdef EXTENDED_TEST
+                            monitorTimerCallBack( ( TimerHandle_t ) pxTimer );
+#else
                             pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
+#endif
                         }
                         else
                         {
