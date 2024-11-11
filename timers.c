@@ -701,13 +701,13 @@
     static void monitorTimerCallBack(Timer_t * const pxTimer)
     {
     	volatile uint32_t start = xTaskGetTickCount();
-    	drdUpdateRunningTimerName(pxTimer->pcTimerName);
+    	drdUpdateRunningTimerName((char *)pxTimer->pcTimerName);
         pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
         drdUpdateRunningTimerName(NULL);
         volatile uint32_t stop = xTaskGetTickCount();
         volatile uint32_t total = stop - start;
         if (total >= 60) {
-        	drdUpdateLongTimerName(pxTimer->pcTimerName, total);
+        	drdUpdateLongTimerName((char *)pxTimer->pcTimerName, total);
 //        	printf("\n------------>%s timer took %ld ticks\n", pxTimer->pcTimerName, total);
         }
     }
