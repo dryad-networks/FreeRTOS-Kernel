@@ -695,7 +695,7 @@
         return pxTimer->pcTimerName;
     }
 /*-----------------------------------------------------------*/
-#ifdef EXTENDED_TEST
+#ifndef TEST_SOFTWARE
     extern void drdUpdateRunningTimerName(char *timerName);
     extern void drdUpdateLongTimerName(char *timerName, uint32_t ticksTaken);
     static void monitorTimerCallBack(Timer_t * const pxTimer)
@@ -708,7 +708,7 @@
         volatile uint32_t total = stop - start;
         if (total >= 60) {
         	drdUpdateLongTimerName(pxTimer->pcTimerName, total);
-        	printf("\n------------>%s timer took %ld ticks\n", pxTimer->pcTimerName, total);
+//        	printf("\n------------>%s timer took %ld ticks\n", pxTimer->pcTimerName, total);
         }
     }
 #endif
@@ -726,7 +726,7 @@
 
             /* Call the timer callback. */
             traceTIMER_EXPIRED( pxTimer );
-#ifdef EXTENDED_TEST
+#ifndef TEST_SOFTWARE
             monitorTimerCallBack( ( TimerHandle_t ) pxTimer );
 #else
             pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
@@ -761,7 +761,7 @@
 
         /* Call the timer callback. */
         traceTIMER_EXPIRED( pxTimer );
-#ifdef EXTENDED_TEST
+#ifndef TEST_SOFTWARE
         monitorTimerCallBack( ( TimerHandle_t ) pxTimer );
 #else
         pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
@@ -1042,7 +1042,7 @@
 
                             /* Call the timer callback. */
                             traceTIMER_EXPIRED( pxTimer );
-#ifdef EXTENDED_TEST
+#ifndef TEST_SOFTWARE
                             monitorTimerCallBack( ( TimerHandle_t ) pxTimer );
 #else
                             pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
