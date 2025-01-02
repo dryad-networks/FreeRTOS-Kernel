@@ -169,8 +169,8 @@ StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
 
     if( iRet != 0 )
     {
-        fprintf( stderr, "[WARN] pthread_attr_setstack failed with return value: %d. Default stack will be used.\n", iRet );
-        fprintf( stderr, "[WARN] Increase the stack size to PTHREAD_STACK_MIN.\n" );
+        //fprintf( stderr, "[WARN] pthread_attr_setstack failed with return value: %d. Default stack will be used.\n", iRet );
+        //fprintf( stderr, "[WARN] Increase the stack size to PTHREAD_STACK_MIN.\n" );
     }
 
     thread->ev = event_create();
