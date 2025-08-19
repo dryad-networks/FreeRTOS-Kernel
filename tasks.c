@@ -7372,12 +7372,19 @@ static void prvResetNextTaskUnblockTime( void )
                             /* MISRA Ref 21.6.1 [snprintf for utility] */
                             /* More details at: https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/main/MISRA.md#rule-216 */
                             /* coverity[misra_c_2012_rule_21_6_violation] */
+                            unsigned int total_stack_in_std_size = pxTaskStatusArray[ x ].pxEndOfStack - pxTaskStatusArray[ x ].pxStackBase + 2;
+                            unsigned int total_stack_in_bytes = total_stack_in_std_size * 4;
+//                          Used Stack Bytes
+                            unsigned int used_bytes = (total_stack_in_std_size - pxTaskStatusArray[ x ].usStackHighWaterMark) * 4;
+//                          Used Stack In percentage
+                            unsigned int used_stack_in_byte_percentage = (used_bytes * 100UL / total_stack_in_bytes) + 1;
                             iSnprintfReturnValue = snprintf( pcWriteBuffer,
                                                              uxBufferLength - uxConsumedBufferLength,
-                                                             "\t%c\t%u\t%u\t%u\r\n",
+                                                             "\t%c\t%u\t%u\t%uB / %uB (%u%%)\t%u\r\n",
                                                              cStatus,
                                                              ( unsigned int ) pxTaskStatusArray[ x ].uxCurrentPriority,
                                                              ( unsigned int ) pxTaskStatusArray[ x ].usStackHighWaterMark,
+															 used_bytes, total_stack_in_bytes, used_stack_in_byte_percentage,
                                                              ( unsigned int ) pxTaskStatusArray[ x ].xTaskNumber );
                         #endif /* ( ( configUSE_CORE_AFFINITY == 1 ) && ( configNUMBER_OF_CORES > 1 ) ) */
                         uxCharsWrittenBySnprintf = prvSnprintfReturnValueToCharsWritten( iSnprintfReturnValue, uxBufferLength - uxConsumedBufferLength );
