@@ -117,6 +117,14 @@ extern void vPortExitCritical( void );
 #define portENTER_CRITICAL()                      vPortEnterCritical()
 #define portEXIT_CRITICAL()                       vPortExitCritical()
 
+/**
+ * @brief Tickless idle/low power functionality.
+ */
+#ifndef portSUPPRESS_TICKS_AND_SLEEP
+    extern void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime );
+    #define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime )    vPortSuppressTicksAndSleep( xExpectedIdleTime )
+#endif
+
 /*-----------------------------------------------------------*/
 
 extern void vPortThreadDying( void * pxTaskToDelete,
